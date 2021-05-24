@@ -1,7 +1,12 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import { useForm } from "react-hook-form";
 import { Input, Label, Form, Row, Button } from "reactstrap";
+import { Link } from "react-router-dom";
+import { useHistory } from "react-router-dom";
+import { useStore } from "../api/index";
+import { API } from "../config/api";
+import Modal from "../Components/ModalError";
 
 const Style = styled.div`
   position: absolute;
@@ -12,7 +17,7 @@ const Style = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  background-color: #768ef0;
+  background-color: #56b6f7;
   font-family: "Roboto", sans-serif;
   .lakugan-title {
     font-weight: bold;
@@ -33,6 +38,7 @@ const Style = styled.div`
   .btn-custom {
     border-radius: 25px;
     margin: 0 20px 0 20px;
+    width: 100%;
   }
   .background-image {
     position: absolute;
@@ -95,13 +101,53 @@ const Style = styled.div`
 `;
 
 const Login = () => {
+  const isAuth = useStore((state) => state.isAuth);
+  const setAuthTrue = useStore((state) => state.setAuthTrue);
+  const history = useHistory();
+  const [error, setError] = useState({ error: false, message: "" });
+  const [loader, setLoader] = useState(false);
   const {
     register,
     handleSubmit,
     formState: { errors },
   } = useForm();
-  const onSubmit = (data) => console.log(data);
-  console.log(errors);
+
+  const onSubmit = async (data) => {
+    setLoader(true);
+    const payload = {
+      email: data.Email,
+      password: data.Password,
+    };
+    const res = await API.post("/login", payload).catch(function (error) {
+      if (error.response) {
+        const errorMessage = error?.response?.data?.message;
+        setLoader(false);
+        setError({
+          error: true,
+          message: errorMessage,
+        });
+      }
+    });
+    console.log(res, "res");
+    if (res?.status === 200) {
+      localStorage.removeItem("token");
+      localStorage.setItem("token", res.data.token);
+      localStorage.setItem("user", res.data.role);
+      setAuthTrue();
+      setLoader(false);
+    }
+  };
+
+  useEffect(() => {
+    if (isAuth) {
+      history.push("/");
+    } else {
+      const token = localStorage.getItem("token");
+      if (token) {
+        setAuthTrue();
+      }
+    }
+  }, [isAuth]);
 
   return (
     <Style id="login">
@@ -113,7 +159,7 @@ const Login = () => {
           <Form onSubmit={handleSubmit(onSubmit)}>
             <Row className="d-flex justify-content-center ">
               <img src="./logo-umkm.png" />
-              <h1>Sistem Pelaporan Koperasi Online</h1>
+              <h1 className="text-center">SIRAGA KOPERASI</h1>
             </Row>
             <Row>
               <Label htmlFor="receiver" className="label">
@@ -137,18 +183,30 @@ const Login = () => {
                 className="btn-custom p-3 mb-3"
                 {...register("Password", { required: true })}
               />
-
-              <Button
-                block
-                color="primary"
-                type="submit"
-                className="btn-custom my-3"
-                // disabled={loading}
+            </Row>
+            <Row className="d-flex justify-content-center ">
+              <div
+                to="/"
+                className="text-black-50 text-decoration-none btn-custom"
               >
-                {/* {loading ? <Spinner color="light" /> : "Masuk"} */}MASUK
-              </Button>
-
-              <span className="register">Belum punya akun?</span>
+                <Button
+                  block
+                  color="primary"
+                  type="submit"
+                  className="btn-custom m-0 my-2"
+                  // disabled={loading}
+                >
+                  MASUK
+                </Button>
+              </div>
+            </Row>
+            <Row>
+              <Link
+                to="/register"
+                className="text-decoration-none text-black-50"
+              >
+                <span className="register">Belum punya akun?</span>
+              </Link>
             </Row>
           </Form>
         </div>

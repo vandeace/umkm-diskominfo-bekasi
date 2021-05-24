@@ -2,12 +2,29 @@ import logo from "./logo.svg";
 import Login from "./Pages/Login";
 import Register from "./Pages/Register";
 import Home from "./Pages/Home";
+import Input from "./Pages/InputData";
+import User from "./Pages/User";
+
+import {
+  BrowserRouter as Router,
+  Route,
+  Switch,
+  withRouter,
+} from "react-router-dom";
 
 function App() {
   return (
-    <div className="App">
-      <Home />
-    </div>
+    <Router>
+      <div className="App">
+        <Switch>
+          <Route path="/" exact component={withRouter(Home)} />
+          <Route path="/login" exact component={withRouter(Login)} />
+          <Route path="/register" exact component={withRouter(Register)} />
+          <Route path="/input" exact component={withRouter(Input)} />
+          <Route path="/user" exact component={withRouter(User)} />
+        </Switch>
+      </div>
+    </Router>
   );
 }
 
