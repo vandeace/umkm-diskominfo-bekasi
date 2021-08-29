@@ -102,10 +102,9 @@ const Index = () => {
         </div>
         <div className="d-flex flex-row justify-content-between py-1 align-items-center border-bottom my-3">
           <div className="d-flex flex-column">
-            <h5 className="bold">Nomor Telepon</h5>
-            <h6>081277169468</h6>
+            <h5 className="bold">Role</h5>
+            <h6>Admin</h6>
           </div>
-          <button className="btn-change">Ubah</button>
         </div>
         <div className="d-flex flex-row justify-content-between py-1 align-items-center border-bottom my-3">
           <div className="d-flex flex-column">

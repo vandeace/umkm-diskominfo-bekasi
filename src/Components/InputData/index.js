@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import { useHistory } from "react-router-dom";
+import DatePicker from "react-datepicker";
+import NumberFormat from "react-number-format";
 import styled from "styled-components";
 import {
   Input,
@@ -15,6 +17,7 @@ import {
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faMinus, faPlus } from "@fortawesome/free-solid-svg-icons";
 import { data } from "../../Utils/DropdownData";
+import "react-datepicker/dist/react-datepicker.css";
 
 const Style = styled.div`
   margin: 30px;
@@ -36,8 +39,9 @@ const InputForm = (props) => {
     handleSubmit,
     formState: { errors },
   } = useForm();
+  console.log(errors, "errors");
   const onSubmit = (data) => {
-    push("/");
+    console.log(data, "data");
   };
   const [ketua, setKetua] = useState(1);
   const [bendahara, setBendahara] = useState(1);
@@ -55,6 +59,9 @@ const InputForm = (props) => {
   const [aturanKhusus, setAturanKhusus] = useState(1);
   const [operasionalManajemen, setOperasionalManajemen] = useState(1);
   const [operasionalProsedur, setOperasionalProsedur] = useState(1);
+  const [bdnHukumDate, setBdnHukumDate] = useState("");
+  const [nonAktifDate, setNonAktifDate] = useState("");
+  const [RAT, setRAT] = useState("");
   const maxKetua = 3;
   const maxFive = 5;
   const maxTen = 10;
@@ -131,7 +138,6 @@ const InputForm = (props) => {
       console.log("error");
     }
   };
-
   const handleBendahara = (e) => {
     if (e === "plus" && maxKetua > bendahara) {
       setBendahara(bendahara + 1);
@@ -207,7 +213,7 @@ const InputForm = (props) => {
                 type="text"
                 name="nama_koperasi"
                 className="btn-custom"
-                {...register("no_badan_hukum", {
+                {...register("namaKoperasi", {
                   required: true,
                 })}
               />
@@ -217,7 +223,7 @@ const InputForm = (props) => {
                 No Badan Hukum
               </Label>
               <Input
-                type="number"
+                type="text"
                 name="no_badan_hukum"
                 className="btn-custom"
                 {...register("no_badan_hukum", {
@@ -226,16 +232,14 @@ const InputForm = (props) => {
               />
             </Col>
             <Col xl="4" lg="4" md="6" sm="12" className="py-2">
-              <Label htmlFor="receiver" className="label">
+              <Label htmlFor="tgl_badan_hukum" className="label">
                 Tanggal Badan Hukum
               </Label>
-              <Input
-                type="number"
+              <DatePicker
+                id="tgl_badan_hukum"
                 name="tgl_badan_hukum"
-                className="btn-custom"
-                {...register("tgl_badan_hukum", {
-                  required: true,
-                })}
+                value={bdnHukumDate}
+                onChange={(v) => setBdnHukumDate(v)}
               />
             </Col>
             <Col xl="10" lg="6" md="6" sm="12" className="py-2">
@@ -318,38 +322,34 @@ const InputForm = (props) => {
             </Col>
             <Col xl="4" lg="4" md="6" sm="12" className="py-2">
               <Label htmlFor="email" className="label">
-                Email
+                *Email
               </Label>
               <Input
                 type="text"
                 name="email"
                 className="btn-custom"
-                {...register("email", {
-                  required: true,
-                })}
+                {...register("email")}
               />
             </Col>
             <Col xl="4" lg="4" md="6" sm="12" className="py-2">
               <Label htmlFor="website" className="label">
-                Website
+                *Website
               </Label>
               <Input
                 type="text"
                 name="website"
                 className="btn-custom"
-                {...register("website", {
-                  required: true,
-                })}
+                {...register("website")}
               />
             </Col>
             <Col xl="4" lg="4" md="6" sm="12" className="py-2">
-              <Label htmlFor="website" className="label">
+              <Label htmlFor="status" className="label">
                 Status
               </Label>
               <Input
                 type="select"
                 name="status"
-                {...register("website", {
+                {...register("status", {
                   required: true,
                 })}
                 onChange={(e) => setStatusKoperasi(e)}
@@ -363,14 +363,12 @@ const InputForm = (props) => {
               <>
                 <Col xl="4" lg="4" md="6" sm="12" className="py-2">
                   <Label htmlFor="jenis_koperasi" className="label">
-                    Bentuk Koperasi
+                    *Bentuk Koperasi
                   </Label>
                   <Input
                     type="select"
                     name="bentuk_koperasi"
-                    {...register("jenis_koperasi", {
-                      required: true,
-                    })}
+                    {...register("jenis_koperasi")}
                   >
                     {data.bentuk_koperasi.map((item, index) => (
                       <option key={index}>{item}</option>
@@ -379,14 +377,12 @@ const InputForm = (props) => {
                 </Col>
                 <Col xl="4" lg="4" md="6" sm="12" className="py-2">
                   <Label htmlFor="jenis_koperasi" className="label">
-                    Jenis Koperasi
+                    *Jenis Koperasi
                   </Label>
                   <Input
                     type="select"
                     name="jenis_koperasi"
-                    {...register("jenis_koperasi", {
-                      required: true,
-                    })}
+                    {...register("jenis_koperasi")}
                   >
                     {data.jenis_koperasi.map((item, index) => (
                       <option key={index}>{item}</option>
@@ -394,13 +390,11 @@ const InputForm = (props) => {
                   </Input>
                 </Col>
                 <Col xl="4" lg="4" md="6" sm="12" className="py-2">
-                  <Label htmlFor="kelompok_koperasi">Kelompok Koperasi</Label>
+                  <Label htmlFor="kelompok_koperasi">*Kelompok Koperasi</Label>
                   <Input
                     type="select"
                     name="kelompok_koperasi"
-                    {...register("kelompok_koperasi", {
-                      required: true,
-                    })}
+                    {...register("kelompok_koperasi")}
                   >
                     {data.kelompok_koperasi.map((item, index) => (
                       <option key={index}>{item}</option>
@@ -408,13 +402,11 @@ const InputForm = (props) => {
                   </Input>
                 </Col>
                 <Col xl="4" lg="4" md="6" sm="12" className="py-2">
-                  <Label htmlFor="sektor_usaha">Sektor Usaha</Label>
+                  <Label htmlFor="sektor_usaha">*Sektor Usaha</Label>
                   <Input
                     type="select"
                     name="sektor_usaha"
-                    {...register("sektor_usaha", {
-                      required: true,
-                    })}
+                    {...register("sektor_usaha")}
                   >
                     {data.sektor_usaha.map((item, index) => (
                       <option key={index}>{item}</option>
@@ -426,27 +418,25 @@ const InputForm = (props) => {
             {status === "non_aktif" && (
               <>
                 <Col xl="4" lg="4" md="6" sm="12" className="py-2">
-                  <Label htmlFor="website" className="text-capitalize">
+                  <Label htmlFor="nonAktifDate" className="text-capitalize">
                     tidak aktif sejak tanggal
                   </Label>
-                  <Input
-                    type="text"
-                    name="tgl_non_aktif"
-                    className="btn-custom"
-                    {...register("tgl_non_aktif", {
-                      required: true,
-                    })}
+                  <DatePicker
+                    id="nonAktifDate"
+                    name="nonAktifDate"
+                    value={nonAktifDate}
+                    onChange={(v) => setNonAktifDate(v)}
                   />
                 </Col>
                 <Col xl="8" lg="8" md="6" sm="12" className="py-2">
-                  <Label htmlFor="website" className="text-capitalize">
+                  <Label htmlFor="ketNonAktif" className="text-capitalize">
                     Keterangan tidak aktif
                   </Label>
                   <Input
                     type="text"
-                    name="tgl_non_aktif"
+                    name="ketNonAktif"
                     className="btn-custom"
-                    {...register("tgl_non_aktif", {
+                    {...register("ketNonAktif", {
                       required: true,
                     })}
                   />
@@ -615,7 +605,7 @@ const InputForm = (props) => {
 
             <Col xl="4" lg="4" md="6" sm="12" className="py-2">
               <Label htmlFor="tahun_pengawas" className="text-capitalize">
-                Apakah Sudah Memiliki Setifikat Nomor Induk Koperasi ?
+                *Apakah Sudah Memiliki Setifikat Nomor Induk Koperasi ?
               </Label>
               <Input
                 type="select"
@@ -725,6 +715,7 @@ const InputForm = (props) => {
               <Label htmlFor="tahun_kelembagaan" className="text-capitalize">
                 Tahun
               </Label>
+
               <Input
                 type="text"
                 name="tahun_kelembagaan"
@@ -821,13 +812,11 @@ const InputForm = (props) => {
               <Label htmlFor="tanggal_rat" className="text-capitalize">
                 Tanggal RAT
               </Label>
-              <Input
-                type="text"
+              <DatePicker
+                id="tanggal_rat"
                 name="tanggal_rat"
-                className="btn-custom"
-                {...register("tanggal_rat", {
-                  required: true,
-                })}
+                value={RAT}
+                onChange={(v) => setRAT(v)}
               />
             </Col>
             <Col xl="12" lg="12" md="12" sm="12" className="py-4">
@@ -925,9 +914,9 @@ const InputForm = (props) => {
                   <div className="d-flex flex-row">
                     <Input
                       type="text"
-                      name={`Jenis Diklat ${index + 1}`}
+                      name={`jenis_diklat_${index + 1}`}
                       className="btn-custom"
-                      {...register(`Jenis Diklat ${index + 1}`)}
+                      {...register(`jenis_diklat_${index + 1}`)}
                     />
                   </div>
                 </Col>
@@ -938,9 +927,9 @@ const InputForm = (props) => {
                   <div className="d-flex flex-row">
                     <Input
                       type="text"
-                      name={`Tahun Diklat ${index + 1}`}
+                      name={`tahun_diklat_${index + 1}`}
                       className="btn-custom"
-                      {...register(`Tahun Diklat ${index + 1}`)}
+                      {...register(`tahun_diklat_${index + 1}`)}
                     />
                     <div className="d-flex flex-column justify-content-center align-items-center p-1 px-3">
                       <FontAwesomeIcon
@@ -1026,15 +1015,15 @@ const InputForm = (props) => {
                   <div className="d-flex flex-row">
                     <Input
                       type="text"
-                      name={`Jenis Fasilitas Pemasaran_${index + 1}`}
+                      name={`Jenis_Fasilitas_Pemasaran_${index + 1}`}
                       className="btn-custom"
-                      {...register(`Jenis Fasilitas Pemasaran_${index + 1}`)}
+                      {...register(`Jenis_Fasilitas_Pemasaran_${index + 1}`)}
                     />
                   </div>
                 </Col>
                 <Col xl="5" lg="5" md="4" sm="12" className="py-1">
                   <Label
-                    htmlFor={`tahun_pembiayaan_${index + 1}`}
+                    htmlFor={`tahun_pemasaran_${index + 1}`}
                     className="text-capitalize"
                   >
                     {`Tahun `}
@@ -1042,9 +1031,9 @@ const InputForm = (props) => {
                   <div className="d-flex flex-row">
                     <Input
                       type="text"
-                      name={`tahun_pembiayaan_${index + 1}`}
+                      name={`tahun_pemasaran_${index + 1}`}
                       className="btn-custom"
-                      {...register(`tahun_pembiayaan_${index + 1}`)}
+                      {...register(`tahun_pemasaran_${index + 1}`)}
                     />
                     <div className="d-flex flex-column justify-content-center align-items-center p-1 px-3">
                       <FontAwesomeIcon
@@ -1072,9 +1061,9 @@ const InputForm = (props) => {
                   <div className="d-flex flex-row">
                     <Input
                       type="text"
-                      name={`Jenis Fasilitas Pemasaran_${index + 1}`}
+                      name={`lembaga_mitra_${index + 1}`}
                       className="btn-custom"
-                      {...register(`Jenis Fasilitas Pemasaran_${index + 1}`)}
+                      {...register(`lembaga_mitra_${index + 1}`)}
                     />
                   </div>
                 </Col>
@@ -1085,9 +1074,9 @@ const InputForm = (props) => {
                   <div className="d-flex flex-row">
                     <Input
                       type="text"
-                      name={`Jenis Fasilitas Pemasaran_${index + 1}`}
+                      name={`Bidang_${index + 1}`}
                       className="btn-custom"
-                      {...register(`Jenis Fasilitas Pemasaran_${index + 1}`)}
+                      {...register(`Bidang_${index + 1}`)}
                     />
                   </div>
                 </Col>
@@ -1105,16 +1094,7 @@ const InputForm = (props) => {
                       className="btn-custom"
                       {...register(`tahun_pembiayaan_${index + 1}`)}
                     />
-                    <div className="d-flex flex-column justify-content-center align-items-center p-1 px-3">
-                      <FontAwesomeIcon
-                        icon={faPlus}
-                        onClick={() => handleMitra("plus")}
-                      />
-                      <FontAwesomeIcon
-                        icon={faMinus}
-                        onClick={() => handleMitra("minus")}
-                      />
-                    </div>
+                    <div className="d-flex flex-column justify-content-center align-items-center p-1 px-3"></div>
                   </div>
                 </Col>
               </>
@@ -1175,9 +1155,9 @@ const InputForm = (props) => {
                     <div className="d-flex flex-row">
                       <Input
                         type="text"
-                        name={`Bendahara ${index + 1}`}
+                        name={`Aturan Khusus ${index + 1}`}
                         className="btn-custom"
-                        {...register(`Bendahara ${index + 1}`)}
+                        {...register(`Aturan Khusus ${index + 1}`)}
                       />
                       <div className="d-flex flex-column justify-content-center align-items-center p-1">
                         <FontAwesomeIcon
@@ -1212,9 +1192,9 @@ const InputForm = (props) => {
                     <div className="d-flex flex-row">
                       <Input
                         type="text"
-                        name={`Bendahara ${index + 1}`}
+                        name={`Operasional Manajemen ${index + 1}`}
                         className="btn-custom"
-                        {...register(`Bendahara ${index + 1}`)}
+                        {...register(`Operasional Manajemen ${index + 1}`)}
                       />
                       <div className="d-flex flex-column justify-content-center align-items-center p-1">
                         <FontAwesomeIcon
@@ -1244,14 +1224,14 @@ const InputForm = (props) => {
                     key={index}
                   >
                     <Label htmlFor="website" className="text-capitalize">
-                      {`Operasional Manajemen ${index + 1}`}
+                      {`Operasional Prosedur ${index + 1}`}
                     </Label>
                     <div className="d-flex flex-row">
                       <Input
                         type="text"
-                        name={`Bendahara ${index + 1}`}
+                        name={`Operasional Prosedur ${index + 1}`}
                         className="btn-custom"
-                        {...register(`Bendahara ${index + 1}`)}
+                        {...register(`Operasional Prosedur ${index + 1}`)}
                       />
                       <div className="d-flex flex-column justify-content-center align-items-center p-1">
                         <FontAwesomeIcon
@@ -1324,7 +1304,7 @@ const InputForm = (props) => {
             </Col>
             <Col xl="6" lg="6" md="6" sm="12" className="py-2">
               <Label htmlFor="tahun_pengawas" className="text-capitalize">
-                Apakah Sudah Memiliki Setifikat Nomor Induk Koperasi ?
+                Apakah Sudah dinilai pemeringkatan ?
               </Label>
               <Input
                 type="select"
@@ -1340,13 +1320,9 @@ const InputForm = (props) => {
               <>
                 <Col xl="6" lg="6" md="6" sm="12" className="py-2">
                   <Label htmlFor="tahun_pengawas" className="text-capitalize">
-                    Apakah Sudah Memiliki Setifikat Nomor Induk Koperasi ?
+                    Predikat pemeringkatan
                   </Label>
-                  <Input
-                    type="select"
-                    name="tahun_pengawas"
-                    onChange={(e) => setStatusPemeringkatan(e)}
-                  >
+                  <Input type="select" name="tahun_pengawas">
                     <option>~</option>
                     <option>Sangat Berkualitas</option>
                     <option>Cukup Berkualitas</option>

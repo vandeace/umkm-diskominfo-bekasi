@@ -10,8 +10,7 @@ const ModalCustom = (props) => {
         ariaHideApp={false}
       >
         <ModalBody className="text-danger text-center">
-          <h1>ERROR</h1>
-          <h2>{props.message}</h2>
+          <h3>{props.message}</h3>
         </ModalBody>
 
         <ModalFooter>

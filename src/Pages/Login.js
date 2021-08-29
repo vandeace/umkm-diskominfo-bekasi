@@ -124,11 +124,10 @@ const Login = () => {
         setLoader(false);
         setError({
           error: true,
-          message: errorMessage,
+          message: `${errorMessage} Wrong Username or Password`,
         });
       }
     });
-    console.log(res, "res");
     if (res?.status === 200) {
       localStorage.removeItem("token");
       localStorage.setItem("token", res.data.token);
@@ -149,18 +148,34 @@ const Login = () => {
     }
   }, [isAuth]);
 
+  const toggle = () => {
+    setError({
+      error: false,
+      message: "",
+    });
+  };
+
   return (
     <Style id="login">
+      <Modal
+        modal={error.error}
+        toggle={toggle}
+        message={error.message}
+        setError={setError}
+      />
       <div className="login-page">
         <div className="card-image">
           <img src="./login.jpg" alt="" className="img-fluid" />
         </div>
         <div className="card-form">
           <Form onSubmit={handleSubmit(onSubmit)}>
-            <Row className="d-flex justify-content-center ">
+            <Row className="d-flex justify-content-center">
               <img src="./logo-umkm.png" />
+            </Row>
+            <Row className="d-flex justify-content-center">
               <h1 className="text-center">SIRAGA KOPERASI</h1>
             </Row>
+
             <Row>
               <Label htmlFor="receiver" className="label">
                 Email

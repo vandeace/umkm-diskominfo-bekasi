@@ -1,5 +1,4 @@
 import styled from "styled-components";
-import { color } from "../../../Utils/Variable";
 
 const FirstLoadStyle = styled.div`
   text-align: center;
@@ -15,7 +14,7 @@ const FirstLoadStyle = styled.div`
     position: absolute;
     width: 50px;
     height: 50px;
-    border: 20px solid ${color.primary};
+    border: 20px solid blue;
     border-top-color: transparent;
     border-radius: 50%;
   }

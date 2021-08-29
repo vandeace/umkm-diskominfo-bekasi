@@ -30,5 +30,22 @@ export const useStore = create((set) => ({
     set({ collection: await res.data.data });
   },
   loading: false,
+  loadingSubmit: false,
+  submitData: async (payload) => {
+    const token = localStorage.getItem("token");
+    set({ loadingSubmit: true });
+
+    const headers = {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
+    };
+
+    const res = await API.post(`koperasi`, payload, {
+      headers: headers,
+    });
+    if (res.data) {
+      set({ loadingSubmit: false });
+    }
+  },
   removeCollection: () => set({ collection: [] }),
 }));

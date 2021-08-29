@@ -119,6 +119,7 @@ const Register = () => {
   const setAuthTrue = useStore((state) => state.setAuthTrue);
 
   const onSubmit = async (data) => {
+    console.log("run");
     setLoader(true);
     const payload = {
       email: data.Email,
@@ -179,6 +180,8 @@ const Register = () => {
           <Form onSubmit={handleSubmit(onSubmit)}>
             <Row className="d-flex justify-content-center ">
               <img src="./logo-umkm.png" />
+            </Row>
+            <Row className="d-flex justify-content-center ">
               <h1 className="title">SIRAGA KOPERASI</h1>
             </Row>
             <Row className="d-flex justify-content-center ">

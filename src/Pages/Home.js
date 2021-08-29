@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import Dashboard from "../Components/Dashboard";
+import DashboardAdmin from "../Components/DashboardAdmin";
 import Body from "../Components/Body";
 import NavBar from "../Components/NavBar";
 import styled from "styled-components";
@@ -18,6 +19,7 @@ const Home = () => {
   const isAuth = useStore((state) => state.isAuth);
   const setAuthTrue = useStore((state) => state.setAuthTrue);
   const setAuthFalse = useStore((state) => state.setAuthFalse);
+  const [isUser, setIsUser] = useState(false);
 
   const history = useHistory();
 
@@ -38,12 +40,17 @@ const Home = () => {
     }
   }, [isAuth]);
 
+  useEffect(() => {
+    const role = localStorage.getItem("user");
+    if (role === "user") {
+      setIsUser(true);
+    }
+  }, [isUser, setIsUser]);
+
   return (
     <Style>
       <NavBar logout={logout} />
-      <Body>
-        <Dashboard />
-      </Body>
+      <Body>{isUser ? <Dashboard /> : <DashboardAdmin />}</Body>
     </Style>
   );
 };
