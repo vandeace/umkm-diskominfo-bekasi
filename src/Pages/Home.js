@@ -38,7 +38,7 @@ const Home = () => {
         history.push("/login");
       }
     }
-  }, [isAuth]);
+  }, [isAuth, history, setAuthTrue]);
 
   useEffect(() => {
     const role = localStorage.getItem("user");

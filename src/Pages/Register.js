@@ -179,7 +179,7 @@ const Register = () => {
         <div className="card-form">
           <Form onSubmit={handleSubmit(onSubmit)}>
             <Row className="d-flex justify-content-center ">
-              <img src="./logo-umkm.png" />
+              <img src="./logo-umkm.png" alt="logo" />
             </Row>
             <Row className="d-flex justify-content-center ">
               <h1 className="title">SIRAGA KOPERASI</h1>

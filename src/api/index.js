@@ -48,4 +48,16 @@ export const useStore = create((set) => ({
     }
   },
   removeCollection: () => set({ collection: [] }),
+  user: {},
+  getUser: async () => {
+    const token = localStorage.getItem("token");
+    const headers = {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
+    };
+    const res = await API.get(`user`, {
+      headers: headers,
+    });
+    set({ user: await res.data.data });
+  },
 }));

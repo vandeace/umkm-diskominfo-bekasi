@@ -144,13 +144,21 @@ const InputData = () => {
       }
     }
   };
+
+  const setAuthFalse = useStore((state) => state.setAuthFalse);
+  const logout = () => {
+    localStorage.clear();
+    setAuthFalse();
+    history.push("/login");
+  };
+
   console.log(store, "store");
   if (loading) {
     return <Loader />;
   } else {
     return (
       <Style>
-        <NavBar />
+        <NavBar logout={logout} />
         <Body>
           <div className="customCard">
             {/* <Input /> */}

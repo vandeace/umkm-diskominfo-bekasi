@@ -1,9 +1,9 @@
-import React from "react";
+import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import styled from "styled-components";
-import { faSignOutAlt, faUser } from "@fortawesome/free-solid-svg-icons";
+import { faUser } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { Input, Label, Form, Row, Button, Col } from "reactstrap";
+import ModalCustom from "../Modal";
 
 const Style = styled.div`
   margin: 30px;
@@ -74,7 +74,8 @@ const Style = styled.div`
   }
 `;
 
-const Index = () => {
+const Index = ({ data }) => {
+  const [modal, setModal] = useState(false);
   const {
     register,
     handleSubmit,
@@ -82,8 +83,14 @@ const Index = () => {
   } = useForm();
   const onSubmit = (data) => console.log(data);
 
+  console.log(data, "data");
+  const toggle = () => {
+    setModal(!modal);
+  };
+
   return (
     <Style>
+      <ModalCustom modal={modal} toggle={toggle} />
       <h1 className="text-center text-uppercase">DATA PROFILE USER</h1>
       <div className="card"></div>
       <div className="custom-card">
@@ -94,16 +101,16 @@ const Index = () => {
         </div>
         <div className="d-flex flex-column my-3 border-bottom py-1">
           <h5 className="bold">Nama</h5>
-          <h6>Muhammad Jafar Ash Siddiq</h6>
+          <h6>{data.fullName}</h6>
         </div>
         <div className="d-flex flex-column my-3 border-bottom py-1">
           <h5 className="bold">Email</h5>
-          <h6>jafar@gmail.com</h6>
+          <h6>{data.email}</h6>
         </div>
         <div className="d-flex flex-row justify-content-between py-1 align-items-center border-bottom my-3">
           <div className="d-flex flex-column">
             <h5 className="bold">Role</h5>
-            <h6>Admin</h6>
+            <h6>{data.role}</h6>
           </div>
         </div>
         <div className="d-flex flex-row justify-content-between py-1 align-items-center border-bottom my-3">
@@ -111,7 +118,9 @@ const Index = () => {
             <h5 className="bold">Password</h5>
             <h6>*************</h6>
           </div>
-          <button className="btn-change">Ubah</button>
+          <button className="btn-change" onClick={() => setModal(!modal)}>
+            Ubah
+          </button>
         </div>
       </div>
     </Style>

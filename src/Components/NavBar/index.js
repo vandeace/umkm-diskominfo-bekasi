@@ -2,7 +2,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import LinkItem from "../Link";
 import React, { useEffect, useState } from "react";
 import { Style } from "./style";
-
+import { useStore } from "../../api/index";
 import {
   faAddressBook,
   faHome,
@@ -13,6 +13,8 @@ import {
 const Index = (props) => {
   const [isUser, setIsUser] = useState(false);
   const [page, setPage] = useState([]);
+  const getUser = useStore((state) => state.getUser);
+  const data = useStore((state) => state.user);
 
   const pagesAdmin = [
     {
@@ -51,7 +53,11 @@ const Index = (props) => {
     } else {
       setPage(pagesUser);
     }
-  }, [isUser, setPage]);
+  }, [isUser]);
+
+  useEffect(() => {
+    getUser();
+  }, [getUser]);
 
   return (
     <Style>
