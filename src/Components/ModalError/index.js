@@ -1,21 +1,21 @@
-import React from "react";
-import { Modal, ModalBody, ModalFooter, Button } from "reactstrap";
+import React from 'react';
+import { Modal, ModalBody, ModalFooter, Button } from 'reactstrap';
 
 const ModalCustom = (props) => {
   return (
     <div>
       <Modal
         isOpen={props.modal}
-        contentLabel="Example Modal"
+        contentLabel='Example Modal'
         ariaHideApp={false}
       >
-        <ModalBody className="text-danger text-center">
+        <ModalBody className='text-danger text-center'>
           <h3>{props.message}</h3>
         </ModalBody>
 
         <ModalFooter>
-          <Button color="danger" onClick={() => props.toggle()}>
-            CLOSE
+          <Button color='danger' onClick={() => props.toggle()}>
+            OK
           </Button>
         </ModalFooter>
       </Modal>

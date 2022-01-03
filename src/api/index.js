@@ -1,5 +1,5 @@
-import create from "zustand";
-import { API } from "../config/api";
+import create from 'zustand';
+import { API } from '../config/api';
 
 export const useStore = create((set) => ({
   //authentication
@@ -11,13 +11,34 @@ export const useStore = create((set) => ({
   collection: [],
   loadingCollection: false,
   fetchError: false,
-  fetchErrorMessage: "",
+  fetchErrorMessage: '',
+  detailData: {},
+  fetchDetailError: false,
+  loadingFetchData: false,
+  fetchDetailData: async (id) => {
+    const token = localStorage.getItem('token');
+    set({ loadingFetchData: true, fetchDetailError: false });
+
+    const headers = {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${token}`,
+    };
+
+    const res = await API.get(`koperasi/${id}`, {
+      headers: headers,
+    });
+    if (res.data) {
+      set({ loadingCollection: false });
+    }
+    console.log(res.data, 'res.data');
+    set({ detailData: await res.data.data });
+  },
   fetchCollection: async () => {
-    const token = localStorage.getItem("token");
+    const token = localStorage.getItem('token');
     set({ loadingCollection: true, fetchError: false });
 
     const headers = {
-      "Content-Type": "application/json",
+      'Content-Type': 'application/json',
       Authorization: `Bearer ${token}`,
     };
 
@@ -32,11 +53,11 @@ export const useStore = create((set) => ({
   loading: false,
   loadingSubmit: false,
   submitData: async (payload) => {
-    const token = localStorage.getItem("token");
+    const token = localStorage.getItem('token');
     set({ loadingSubmit: true });
 
     const headers = {
-      "Content-Type": "application/json",
+      'Content-Type': 'application/json',
       Authorization: `Bearer ${token}`,
     };
 
@@ -47,12 +68,28 @@ export const useStore = create((set) => ({
       set({ loadingSubmit: false });
     }
   },
+  submitDataEdit: async (payload) => {
+    const token = localStorage.getItem('token');
+    set({ loadingSubmit: true });
+
+    const headers = {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${token}`,
+    };
+
+    const res = await API.post(`koperasi/${payload.id}`, payload, {
+      headers: headers,
+    });
+    if (res.data) {
+      set({ loadingSubmit: false });
+    }
+  },
   removeCollection: () => set({ collection: [] }),
   user: {},
   getUser: async () => {
-    const token = localStorage.getItem("token");
+    const token = localStorage.getItem('token');
     const headers = {
-      "Content-Type": "application/json",
+      'Content-Type': 'application/json',
       Authorization: `Bearer ${token}`,
     };
     const res = await API.get(`user`, {

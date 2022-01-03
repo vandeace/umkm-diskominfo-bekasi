@@ -1,13 +1,13 @@
-import React, { useEffect, useState } from "react";
-import styled from "styled-components";
-import { useForm } from "react-hook-form";
-import { Input, Label, Form, Row, Button, Col } from "reactstrap";
-import { Link } from "react-router-dom";
-import { useStore } from "../api/index";
-import { API } from "../config/api";
-import Modal from "../Components/ModalError";
-import { useHistory } from "react-router-dom";
-import { token } from "../config/api";
+import React, { useEffect, useState } from 'react';
+import styled from 'styled-components';
+import { useForm } from 'react-hook-form';
+import { Input, Label, Form, Row, Button, Col } from 'reactstrap';
+import { Link } from 'react-router-dom';
+import { useStore } from '../api/index';
+import { API } from '../config/api';
+import Modal from '../Components/ModalError';
+import { useHistory } from 'react-router-dom';
+import { token } from '../config/api';
 
 const Style = styled.div`
   position: absolute;
@@ -19,7 +19,7 @@ const Style = styled.div`
   justify-content: center;
   align-items: center;
   background-color: #56b6f7;
-  font-family: "Roboto", sans-serif;
+  font-family: 'Roboto', sans-serif;
   .lakugan-title {
     font-weight: bold;
     margin-bottom: 30px;
@@ -31,8 +31,9 @@ const Style = styled.div`
     }
   }
   .title {
+    font-size: 16px;
     @media (max-width: 1200px) {
-      font-size: 30px;
+      font-size: 16px;
     }
   }
   .login-page {
@@ -77,7 +78,6 @@ const Style = styled.div`
       }
       .lakugan-logo {
         width: 150px;
-        margin-bottom: 30px;
         @media (max-width: 900px) {
           display: block;
           margin: 0 auto 20px;
@@ -113,13 +113,13 @@ const Register = () => {
     handleSubmit,
     formState: { errors },
   } = useForm();
-  const [error, setError] = useState({ error: false, message: "" });
+  const [error, setError] = useState({ error: false, message: '' });
   const [loader, setLoader] = useState(false);
   const isAuth = useStore((state) => state.isAuth);
   const setAuthTrue = useStore((state) => state.setAuthTrue);
 
   const onSubmit = async (data) => {
-    console.log("run");
+    console.log('run');
     setLoader(true);
     const payload = {
       email: data.Email,
@@ -127,7 +127,7 @@ const Register = () => {
       fullName: data.Name,
       role: data.role,
     };
-    const res = await API.post("/register", payload).catch(function (error) {
+    const res = await API.post('/register', payload).catch(function (error) {
       if (error.response) {
         const errorMessage = error?.response?.data?.message;
         setLoader(false);
@@ -137,10 +137,10 @@ const Register = () => {
         });
       }
     });
-    console.log(res, "res");
+    console.log(res, 'res');
     if (res?.status === 200) {
-      localStorage.removeItem("token");
-      localStorage.setItem("token", res.data.token);
+      localStorage.removeItem('token');
+      localStorage.setItem('token', res.data.token);
       setAuthTrue();
       setLoader(false);
     }
@@ -149,102 +149,102 @@ const Register = () => {
   const toggle = () => {
     setError({
       error: false,
-      message: "",
+      message: '',
     });
   };
 
   useEffect(() => {
     if (isAuth) {
-      history.push("/");
+      history.push('/');
     } else {
       if (token) {
         setAuthTrue();
-        history.push("/");
+        history.push('/');
       }
     }
   }, [isAuth]);
 
   return (
-    <Style id="register">
+    <Style id='register'>
       <Modal
         modal={error.error}
         toggle={toggle}
         message={error.message}
         setError={setError}
       />
-      <div className="login-page">
-        <div className="card-image">
-          <img src="./login.jpg" alt="" className="img-fluid" />
+      <div className='login-page'>
+        <div className='card-image'>
+          <img src='./login.jpg' alt='' className='img-fluid' />
         </div>
-        <div className="card-form">
+        <div className='card-form'>
           <Form onSubmit={handleSubmit(onSubmit)}>
-            <Row className="d-flex justify-content-center ">
-              <img src="./logo-umkm.png" alt="logo" />
+            <Row className='d-flex justify-content-center '>
+              <img src='./logo-umkm.png' alt='logo' className='lakugan-logo' />
             </Row>
-            <Row className="d-flex justify-content-center ">
-              <h1 className="title">SIRAGA KOPERASI</h1>
+            <Row className='d-flex justify-content-center '>
+              <h1 className='title'>SIRAGA KOPERASI</h1>
             </Row>
-            <Row className="d-flex justify-content-center ">
-              <h1 className="title">REGISTER</h1>
+            <Row className='d-flex justify-content-center '>
+              <h1 className='title'>REGISTER</h1>
             </Row>
             <Row>
-              <Label htmlFor="receiver" className=" label">
+              <Label htmlFor='receiver' className=' label'>
                 Nama Lengkap
               </Label>
               <Input
-                type="text"
-                placeholder="Nama Lengkap"
-                className="btn-custom p-3 mb-3"
-                {...register("Name", { required: true })}
+                type='text'
+                placeholder='Nama Lengkap'
+                className='btn-custom p-3 mb-3'
+                {...register('Name', { required: true })}
               />
-              <Label htmlFor="receiver" className="label">
+              <Label htmlFor='receiver' className='label'>
                 Email
               </Label>
               <Input
-                type="text"
-                placeholder="Email"
-                className="btn-custom p-3 mb-3"
-                {...register("Email", {
+                type='text'
+                placeholder='Email'
+                className='btn-custom p-3 mb-3'
+                {...register('Email', {
                   required: true,
                   pattern: /^\S+@\S+$/i,
                 })}
               />
-              <Label htmlFor="receiver" className="label">
+              <Label htmlFor='receiver' className='label'>
                 Role
               </Label>
 
               <Input
-                type="select"
-                className="btn-custom p-0 pl-3 mb-3"
-                placeholder="role"
-                {...register("role", {
+                type='select'
+                className='btn-custom p-0 pl-3 mb-3'
+                placeholder='role'
+                {...register('role', {
                   required: true,
                 })}
               >
-                <option value="admin">DINAS</option>
-                <option value="user">KOPERASI</option>
+                <option value='admin'>DINAS</option>
+                <option value='user'>KOPERASI</option>
               </Input>
 
-              <Label htmlFor="receiver" className=" label">
+              <Label htmlFor='receiver' className=' label'>
                 Password
               </Label>
               <Input
-                type="password"
-                placeholder="Password"
-                className="btn-custom p-3 mb-3"
-                {...register("Password", { required: true })}
+                type='password'
+                placeholder='Password'
+                className='btn-custom p-3 mb-3'
+                {...register('Password', { required: true })}
               />
             </Row>
-            <Row className="d-flex justify-content-center ">
+            <Row className='d-flex justify-content-center '>
               <div
-                to="/"
-                className="text-black-50 text-decoration-none btn-custom"
+                to='/'
+                className='text-black-50 text-decoration-none btn-custom'
               >
                 <Button
                   block
-                  color="primary"
-                  type="submit"
-                  className="btn-custom m-0 my-2"
+                  color='primary'
+                  type='submit'
+                  className='btn-custom m-0 my-2'
                   // disabled={loading}
                 >
                   DAFTAR
@@ -252,8 +252,8 @@ const Register = () => {
               </div>
             </Row>
             <Row>
-              <Link to="/login" className="text-decoration-none text-black-50">
-                <span className="register">Sudah punya akun?</span>
+              <Link to='/login' className='text-decoration-none text-black-50'>
+                <span className='register'>Sudah punya akun?</span>
               </Link>
             </Row>
           </Form>

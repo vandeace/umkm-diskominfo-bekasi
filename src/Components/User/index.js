@@ -1,9 +1,9 @@
-import React, { useState } from "react";
-import { useForm } from "react-hook-form";
-import styled from "styled-components";
-import { faUser } from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import ModalCustom from "../Modal";
+import React, { useState } from 'react';
+import { useForm } from 'react-hook-form';
+import styled from 'styled-components';
+import { faUser } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import ModalCustom from '../Modal';
 
 const Style = styled.div`
   margin: 30px;
@@ -83,7 +83,6 @@ const Index = ({ data }) => {
   } = useForm();
   const onSubmit = (data) => console.log(data);
 
-  console.log(data, "data");
   const toggle = () => {
     setModal(!modal);
   };
@@ -91,34 +90,34 @@ const Index = ({ data }) => {
   return (
     <Style>
       <ModalCustom modal={modal} toggle={toggle} />
-      <h1 className="text-center text-uppercase">DATA PROFILE USER</h1>
-      <div className="card"></div>
-      <div className="custom-card">
-        <div className="d-flex justify-content-center my-5">
-          <div className="user py-2">
-            <FontAwesomeIcon icon={faUser} size="7x" />
+      <h1 className='text-center text-uppercase'>DATA PROFILE USER</h1>
+      <div className='card'></div>
+      <div className='custom-card'>
+        <div className='d-flex justify-content-center my-5'>
+          <div className='user py-2'>
+            <FontAwesomeIcon icon={faUser} size='7x' />
           </div>
         </div>
-        <div className="d-flex flex-column my-3 border-bottom py-1">
-          <h5 className="bold">Nama</h5>
+        <div className='d-flex flex-column my-3 border-bottom py-1'>
+          <h5 className='bold'>Nama</h5>
           <h6>{data.fullName}</h6>
         </div>
-        <div className="d-flex flex-column my-3 border-bottom py-1">
-          <h5 className="bold">Email</h5>
+        <div className='d-flex flex-column my-3 border-bottom py-1'>
+          <h5 className='bold'>Email</h5>
           <h6>{data.email}</h6>
         </div>
-        <div className="d-flex flex-row justify-content-between py-1 align-items-center border-bottom my-3">
-          <div className="d-flex flex-column">
-            <h5 className="bold">Role</h5>
+        <div className='d-flex flex-row justify-content-between py-1 align-items-center border-bottom my-3'>
+          <div className='d-flex flex-column'>
+            <h5 className='bold'>Role</h5>
             <h6>{data.role}</h6>
           </div>
         </div>
-        <div className="d-flex flex-row justify-content-between py-1 align-items-center border-bottom my-3">
-          <div className="d-flex flex-column">
-            <h5 className="bold">Password</h5>
+        <div className='d-flex flex-row justify-content-between py-1 align-items-center border-bottom my-3'>
+          <div className='d-flex flex-column'>
+            <h5 className='bold'>Password</h5>
             <h6>*************</h6>
           </div>
-          <button className="btn-change" onClick={() => setModal(!modal)}>
+          <button className='btn-change' onClick={() => setModal(!modal)}>
             Ubah
           </button>
         </div>

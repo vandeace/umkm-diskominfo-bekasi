@@ -1,11 +1,11 @@
-import React from "react";
-import { useForm, useFieldArray, Controller } from "react-hook-form";
-import { Col, Row } from "reactstrap";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faMinus, faPlus } from "@fortawesome/free-solid-svg-icons";
-import ReactDatePicker from "react-datepicker";
-import NumberFormat from "react-number-format";
-
+import React from 'react';
+import { useForm, useFieldArray, Controller } from 'react-hook-form';
+import { Col, Row } from 'reactstrap';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faMinus, faPlus } from '@fortawesome/free-solid-svg-icons';
+import ReactDatePicker from 'react-datepicker';
+import NumberFormat from 'react-number-format';
+import moment from 'moment';
 
 const Form5 = ({ onSubmit, store, setValue, value }) => {
   const {
@@ -24,69 +24,69 @@ const Form5 = ({ onSubmit, store, setValue, value }) => {
 
   const { fields, append, remove } = useFieldArray({
     control,
-    name: "manager",
+    name: 'manager',
   });
 
   return (
     <div>
       <form onSubmit={handleSubmit(onSubmit)}>
         <Row>
-          <Col xl="12" lg="12" md="12" sm="12" className="py-2">
-            <h1 className="text-center text-uppercase"> Kelembagaan</h1>
+          <Col xl='12' lg='12' md='12' sm='12' className='py-2'>
+            <h1 className='text-center text-uppercase'> Kelembagaan</h1>
           </Col>
-          <Col xl="2" lg="2" md="6" sm="12" className="py-2">
-            <label htmlFor="tahunKelembagaan" className="">
+          <Col xl='2' lg='2' md='6' sm='12' className='py-2'>
+            <label htmlFor='tahunKelembagaan' className=''>
               Tahun
             </label>
 
-            <input className="customInput" {...register("tahunKelembagaan")} />
+            <input className='customInput' {...register('tahunKelembagaan')} />
           </Col>
         </Row>
         <Row>
-          <Col xl="3" lg="3" md="6" sm="12" className="py-2">
-            <label htmlFor="jumlahAnggota" className="">
+          <Col xl='3' lg='3' md='6' sm='12' className='py-2'>
+            <label htmlFor='jumlahAnggota' className=''>
               Jumlah Anggota
             </label>
-            <input className="customInput" {...register("jumlahAnggota")} />
+            <input className='customInput' {...register('jumlahAnggota')} />
           </Col>
-          <Col xl="3" lg="3" md="6" sm="12" className="py-2">
-            <label htmlFor="anggotaL" className="">
+          <Col xl='3' lg='3' md='6' sm='12' className='py-2'>
+            <label htmlFor='anggotaL' className=''>
               Laki Laki
             </label>
-            <input className="customInput" {...register("anggotaL")} />
+            <input className='customInput' {...register('anggotaL')} />
           </Col>
-          <Col xl="3" lg="3" md="6" sm="12" className="py-2">
-            <label htmlFor="anggotaP" className="">
+          <Col xl='3' lg='3' md='6' sm='12' className='py-2'>
+            <label htmlFor='anggotaP' className=''>
               Perempuan
             </label>
-            <input className="customInput" {...register("anggotaP")} />
+            <input className='customInput' {...register('anggotaP')} />
           </Col>
-          <Col xl="3" lg="3" md="6" sm="12" className="py-2">
-            <label htmlFor="jumlahKaryawan" className="">
+          <Col xl='3' lg='3' md='6' sm='12' className='py-2'>
+            <label htmlFor='jumlahKaryawan' className=''>
               Jumlah Karyawan
             </label>
-            <input className="customInput" {...register("jumlahKaryawan")} />
+            <input className='customInput' {...register('jumlahKaryawan')} />
           </Col>
         </Row>
         <Row>
           {fields.map((item, index) => {
             return (
-              <Col xl="4" lg="4" md="4" sm="12" className="py-1" key={index}>
-                <label htmlFor="website" className="text-capitalize">
+              <Col xl='4' lg='4' md='4' sm='12' className='py-1' key={index}>
+                <label htmlFor='website' className='text-capitalize'>
                   {`Manajer ${index + 1}`}
                 </label>
-                <div className="d-flex flex-row">
+                <div className='d-flex flex-row'>
                   <input
-                    className="customInput"
+                    className='customInput'
                     defaultValue={`${item.nama}`} // make sure to set up defaultValue
                     {...register(`manager[${index}].nama`)}
                   />
-                  <div className="d-flex flex-column justify-content-center align-items-center p-1">
+                  <div className='d-flex flex-column justify-content-center align-items-center p-1'>
                     <FontAwesomeIcon
                       icon={faPlus}
                       onClick={() => {
                         if (fields.length < 3) {
-                          append({ nama: "" });
+                          append({ nama: '' });
                         }
                       }}
                     />
@@ -101,142 +101,146 @@ const Form5 = ({ onSubmit, store, setValue, value }) => {
           })}
         </Row>
         <Row>
-          <Col xl="2" lg="2" md="6" sm="12" className="py-2">
-            <label htmlFor="tglRAT" className="">
+          <Col xl='2' lg='2' md='6' sm='12' className='py-2'>
+            <label htmlFor='tglRAT' className=''>
               Tgl RAT
             </label>
             <br />
 
             <Controller
               control={control}
-              name="tglRAT"
+              name='tglRAT'
               rules={{ required: true }}
               render={(props) => (
                 <ReactDatePicker
-                  className="customInput"
-                  dateFormat="dd/MM/yyyy"
-                  placeholderText="Select date"
+                  className='customInput'
+                  dateFormat='dd/MM/yyyy'
+                  placeholderText='Select date'
                   onChange={(e) => props.field.onChange(e)}
-                  selected={props.field.value}
+                  selected={
+                    props.field.value === ''
+                      ? props.field.value
+                      : moment(props.field.value).toDate()
+                  }
                 />
               )}
             />
             {errors.tanggalBadanHukum && (
-              <p className="text-danger"> data tidak boleh kosong </p>
+              <p className='text-danger'> data tidak boleh kosong </p>
             )}
           </Col>
         </Row>
         <Row>
-          <Col xl="12" lg="12" md="12" sm="12" className="py-2">
-            <h1 className="text-center text-uppercase"> Indikator Usaha</h1>
+          <Col xl='12' lg='12' md='12' sm='12' className='py-2'>
+            <h1 className='text-center text-uppercase'> Indikator Usaha</h1>
           </Col>
-          <Col xl="2" lg="2" md="6" sm="12" className="py-2">
-            <label htmlFor="modalSendiri" className="">
+          <Col xl='2' lg='2' md='6' sm='12' className='py-2'>
+            <label htmlFor='modalSendiri' className=''>
               Modal Sendiri
             </label>
             <Controller
               render={({ field }) => (
                 <NumberFormat
-                  prefix={"Rp "}
+                  prefix={'Rp '}
                   thousandSeparator
                   {...field}
-                  className="customInput"
+                  className='customInput'
                 />
               )}
-              name="modalSendiri"
-              className="input"
+              name='modalSendiri'
+              className='input'
               control={control}
             />
           </Col>
-          <Col xl="2" lg="2" md="6" sm="12" className="py-2">
-            <label htmlFor="modalLuar" className="">
+          <Col xl='2' lg='2' md='6' sm='12' className='py-2'>
+            <label htmlFor='modalLuar' className=''>
               Modal Luar
             </label>
             <Controller
               render={({ field }) => (
                 <NumberFormat
-                  prefix={"Rp "}
+                  prefix={'Rp '}
                   thousandSeparator
                   {...field}
-                  className="customInput"
+                  className='customInput'
                 />
               )}
-              name="modalLuar"
-              className="input"
+              name='modalLuar'
+              className='input'
               control={control}
             />
           </Col>
-          <Col xl="2" lg="2" md="6" sm="12" className="py-2">
-            <label htmlFor="nilaiAset" className="">
+          <Col xl='2' lg='2' md='6' sm='12' className='py-2'>
+            <label htmlFor='nilaiAset' className=''>
               Nilai Aset
             </label>
             <Controller
               render={({ field }) => (
                 <NumberFormat
-                  prefix={"Rp "}
+                  prefix={'Rp '}
                   thousandSeparator
                   {...field}
-                  className="customInput"
+                  className='customInput'
                 />
               )}
-              name="nilaiAset"
-              className="input"
+              name='nilaiAset'
+              className='input'
               control={control}
             />
           </Col>
-          <Col xl="2" lg="2" md="6" sm="12" className="py-2">
-            <label htmlFor="volumeUsaha" className="">
+          <Col xl='2' lg='2' md='6' sm='12' className='py-2'>
+            <label htmlFor='volumeUsaha' className=''>
               Volume Usaha
             </label>
             <Controller
               render={({ field }) => (
                 <NumberFormat
-                  prefix={"Rp "}
+                  prefix={'Rp '}
                   thousandSeparator
                   {...field}
-                  className="customInput"
+                  className='customInput'
                 />
               )}
-              name="volumeUsaha"
-              className="input"
+              name='volumeUsaha'
+              className='input'
               control={control}
             />
           </Col>
-          <Col xl="2" lg="2" md="6" sm="12" className="py-2">
-            <label htmlFor="SHU" className="">
+          <Col xl='2' lg='2' md='6' sm='12' className='py-2'>
+            <label htmlFor='SHU' className=''>
               SHU
             </label>
             <Controller
               render={({ field }) => (
                 <NumberFormat
-                  prefix={"Rp "}
+                  prefix={'Rp '}
                   thousandSeparator
                   {...field}
-                  className="customInput"
+                  className='customInput'
                 />
               )}
-              name="SHU"
-              className="input"
+              name='SHU'
+              className='input'
               control={control}
             />
           </Col>
         </Row>
 
         <Row>
-          <Col xl="6" lg="6" md="6" sm="6" className="py-2">
+          <Col xl='6' lg='6' md='6' sm='6' className='py-2'>
             <input
-              className="customSubmit"
-              type="button"
+              className='customSubmit'
+              type='button'
               onClick={() => setValue(value - 1)}
-              value="<< prev"
+              value='<< prev'
             />
           </Col>
-          <Col xl="6" lg="6" md="6" sm="6" className="py-2">
+          <Col xl='6' lg='6' md='6' sm='6' className='py-2'>
             <input
-              className="customSubmit"
-              type="submit"
-              title="next"
-              value="next >>"
+              className='customSubmit'
+              type='submit'
+              title='next'
+              value='next >>'
             />
           </Col>
         </Row>
