@@ -1,14 +1,16 @@
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import LinkItem from "../Link";
-import React, { useEffect, useState } from "react";
-import { Style } from "./style";
-import { useStore } from "../../api/index";
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import LinkItem from '../Link';
+import React, { useEffect, useState } from 'react';
+import { Style } from './style';
+import { useStore } from '../../api/index';
 import {
   faAddressBook,
   faHome,
   faSignOutAlt,
   faUser,
-} from "@fortawesome/free-solid-svg-icons";
+  faUsers,
+} from '@fortawesome/free-solid-svg-icons';
+import ModalCustom from '../Modal';
 
 const Index = (props) => {
   const [isUser, setIsUser] = useState(false);
@@ -18,37 +20,42 @@ const Index = (props) => {
 
   const pagesAdmin = [
     {
-      name: "Dashboard",
+      name: 'Dashboard',
       iconClass: faHome,
-      path: "/",
+      path: '/',
     },
     {
-      name: "User Profile",
+      name: 'User List',
+      iconClass: faUsers,
+      path: '/users',
+    },
+    {
+      name: 'User Profile',
       iconClass: faUser,
-      path: "/user",
+      path: '/user',
     },
   ];
   const pagesUser = [
     {
-      name: "Dashboard",
+      name: 'Dashboard',
       iconClass: faHome,
-      path: "/",
+      path: '/',
     },
     {
-      name: "Input Data",
+      name: 'Input Data',
       iconClass: faAddressBook,
-      path: "/input",
+      path: '/input',
     },
     {
-      name: "User Profile",
+      name: 'User Profile',
       iconClass: faUser,
-      path: "/user",
+      path: '/user',
     },
   ];
 
   useEffect(() => {
-    const user = localStorage.getItem("user");
-    if (user === "admin") {
+    const user = localStorage.getItem('user');
+    if (user === 'admin') {
       setPage(pagesAdmin);
     } else {
       setPage(pagesUser);
@@ -61,23 +68,23 @@ const Index = (props) => {
 
   return (
     <Style>
-      <div className="d-flex flex-column justify-content-center align-items-center pt-3 py-4">
-        <div className="user py-2">
-          <FontAwesomeIcon icon={faUser} size="4x" />
+      <div className='d-flex flex-column justify-content-center align-items-center pt-3 py-4'>
+        <div className='user py-2'>
+          <FontAwesomeIcon icon={faUser} size='4x' />
         </div>
-        <h6 className="pt-2">Jafar</h6>
+        <h6 className='pt-2'>Jafar</h6>
       </div>
-      <div className="d-flex flex-column align-items-center w-100">
-        <ul className="p-0">
+      <div className='d-flex flex-column align-items-center w-100'>
+        <ul className='p-0'>
           {page.map((page, index) => (
             <LinkItem page={page} key={index} />
           ))}
         </ul>
       </div>
-      <div className="logout-container">
-        <div to="/login" className="logout" onClick={() => props.logout()}>
-          <FontAwesomeIcon icon={faSignOutAlt} size="2x" />{" "}
-          <span className="pl-3 font-weight-bold" style={{ fontSize: "16px" }}>
+      <div className='logout-container'>
+        <div to='/login' className='logout' onClick={() => props.logout()}>
+          <FontAwesomeIcon icon={faSignOutAlt} size='2x' />{' '}
+          <span className='pl-3 font-weight-bold' style={{ fontSize: '16px' }}>
             Logout
           </span>
         </div>

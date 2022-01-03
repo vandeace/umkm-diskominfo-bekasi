@@ -9,6 +9,7 @@ export const useStore = create((set) => ({
 
   //data
   collection: [],
+  users: [],
   loadingCollection: false,
   fetchError: false,
   fetchErrorMessage: '',
@@ -96,5 +97,16 @@ export const useStore = create((set) => ({
       headers: headers,
     });
     set({ user: await res.data.data });
+  },
+  getUsers: async () => {
+    const token = localStorage.getItem('token');
+    const headers = {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${token}`,
+    };
+    const res = await API.get(`users`, {
+      headers: headers,
+    });
+    set({ users: await res.data.data });
   },
 }));

@@ -5,6 +5,7 @@ import Home from './Pages/Home';
 import Input from './Pages/InputData';
 import Edit from './Pages/EditData';
 import User from './Pages/User';
+import Users from './Pages/Users';
 
 import {
   BrowserRouter as Router,
@@ -23,6 +24,7 @@ function App() {
           <Route path='/register' exact component={withRouter(Register)} />
           <Route path='/input' exact component={withRouter(Input)} />
           <Route path='/user' exact component={withRouter(User)} />
+          <Route path='/users' exact component={withRouter(Users)} />
           <Route path='/edit/:id' component={withRouter(Edit)} />
         </Switch>
       </div>

@@ -1,18 +1,19 @@
-import 'chart.js/auto';
-import React, { useEffect, useMemo, useRef, useState } from 'react';
-import { Pie } from 'react-chartjs-2';
-import {
-  useGlobalFilter,
-  usePagination,
-  useRowSelect,
-  useTable,
-} from 'react-table';
+import React, { useEffect, useMemo, useState } from 'react';
 import { Table } from 'reactstrap';
 import styled from 'styled-components';
-import { useStore } from '../../api';
-import { COLUMNS } from '../../Utils/columns';
+import {
+  useTable,
+  usePagination,
+  useRowSelect,
+  useGlobalFilter,
+} from 'react-table';
+import { COLUMNUSER } from '../../Utils/columns';
 import GlobalFilter from '../../Utils/GlobalFilter';
-import { CSVLink, CSVDownload } from 'react-csv';
+import { useStore } from '../../api';
+import { Link } from 'react-router-dom';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faEye, faPencilAlt, faTrash } from '@fortawesome/free-solid-svg-icons';
+import ModalCustom from '../Modal';
 
 const Style = styled.div`
   margin: 30px;
@@ -20,35 +21,11 @@ const Style = styled.div`
   border: 0px solid #dae1e7;
   box-shadow: rgba(0, 0, 0, 0.11) 0px 15px 30px 0px,
     rgba(0, 0, 0, 0.08) 0px 5px 15px 0px;
-  .overview {
-    height: 450px;
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-    .left {
-      width: 50%;
-      display: flex;
-      flex-direction: column;
-      justify-content: space-around;
-    }
-    canvas {
-      height: 400px !important;
-      width: 400px !important;
-    }
-  }
-  .table-header {
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-  }
   .t-head {
     min-width: 100px;
     font-size: 18px;
     padding: 5px;
     text-align: center;
-    .datashow {
-      height: 400px;
-    }
     &-no {
       min-width: 20px;
     }
@@ -75,24 +52,13 @@ const Style = styled.div`
 
 const Index = () => {
   // const [data, setData] = useState(data_koperasi);
-  const tableRef = useRef(null);
-  const data = useStore((state) => state.collection);
-  const [exportData, setExportData] = useState([]);
-  const fetchCollection = useStore((state) => state.fetchCollection);
-  const columns = useMemo(() => COLUMNS, []);
-  const [active, setActive] = useState(0);
-  const [nonActive, setNonActive] = useState(0);
-  const dataPie = {
-    labels: ['Non Active', 'Active'],
-    datasets: [
-      {
-        data: [nonActive, active],
-        backgroundColor: ['rgba(255, 99, 132, 0.2)', 'rgba(75, 192, 192, 0.2)'],
-        borderColor: ['rgba(255, 99, 132, 1)', 'rgba(75, 192, 192, 1)'],
-        borderWidth: 1,
-      },
-    ],
-  };
+  const [modal, setModal] = useState(false);
+  const [deleteID, setDeleteID] = useState(0);
+  const [userId, setUserId] = useState(0);
+
+  const data = useStore((state) => state.users);
+  const fetchData = useStore((state) => state.getUsers);
+  const columns = useMemo(() => COLUMNUSER, []);
 
   const tableInstance = useTable(
     {
@@ -101,7 +67,40 @@ const Index = () => {
     },
     useGlobalFilter,
     usePagination,
-    useRowSelect
+    useRowSelect,
+    (hooks) => {
+      hooks.visibleColumns.push((columns) => [
+        ...columns,
+
+        {
+          Header: 'Action',
+          Cell: ({ row }) => (
+            <div
+              style={{
+                display: 'flex',
+                flexDirection: 'row',
+                justifyContent: 'space-around',
+                alignItems: 'center',
+                cursor: 'pointer',
+              }}
+            >
+              <div>
+                <FontAwesomeIcon
+                  icon={faPencilAlt}
+                  className='mx-1'
+                  color='blue'
+                  size='1x'
+                  onClick={() => {
+                    setUserId(row.original.id);
+                    toggle();
+                  }}
+                />
+              </div>
+            </div>
+          ),
+        },
+      ]);
+    }
   );
 
   const {
@@ -124,73 +123,27 @@ const Index = () => {
   const { pageIndex, globalFilter } = state;
 
   useEffect(() => {
-    fetchCollection();
+    fetchData();
   }, []);
+  console.log(data, 'data');
 
-  useEffect(() => {
-    const active = data.filter(checkAge);
-    const nonActive = data.filter(nonActiveCheck);
-    function checkAge(payload) {
-      console.log(payload, 'payload');
-      return payload.status === 'aktif';
-    }
-    function nonActiveCheck(payload) {
-      console.log(payload, 'payload');
-      return payload.status === 'non_aktif';
-    }
+  const deleteItem = (id) => {
+    setDeleteID(id);
+    setModal(true);
+  };
 
-    setActive(active.length);
-    setNonActive(nonActive.length);
-
-    const exportedData = data.map(
-      ({
-        ketuaKepengurusan,
-        sekretarisKepengurusan,
-        anggotaPengawasan,
-        manager,
-        diklat,
-        pembiayaan,
-        pemasaran,
-        mitra,
-        peraturanKhusus,
-        SOP,
-        SOM,
-        bendaharaKepengurusan,
-        ...rest
-      }) => ({ ...rest })
-    );
-    setExportData(exportedData);
-  }, [data]);
+  const toggle = () => {
+    setModal(!modal);
+  };
 
   return (
     <Style>
+      <ModalCustom modal={modal} toggle={toggle} userId={userId} />
       <h1 className='text-uppercase text-center'>DashBoard SIRAGA KOPERASI</h1>
-      <div className='overview'>
-        <div className='right'>
-          <Pie data={dataPie} />
-        </div>
-        <div className='left'>
-          <div className='text-wrapper'>
-            <h4 className='title'>Total Koperasi</h4>
-            <h4 className='title-data'>{data.length}</h4>
-          </div>
-          <div className='text-wrapper'>
-            <h4 className='title'>Total Koperasi Aktif</h4>
-            <h4 className='title-data'>{active}</h4>
-          </div>
-          <div className='text-wrapper'>
-            <h4 className='title'>Total Koperasi Non Aktif</h4>
-            <h4 className='title-data'>{nonActive}</h4>
-          </div>
-        </div>
-      </div>
       <div className='card'></div>
       <h3 className='text-uppercase text-center'>Data Koperasi</h3>
-      <div className='table'>
-        <div className='table-header'>
-          <GlobalFilter filter={globalFilter} setFilter={setGlobalFilter} />
-          <CSVLink data={exportData}>Export To Excel</CSVLink>
-        </div>
+      <div className=''>
+        <GlobalFilter filter={globalFilter} setFilter={setGlobalFilter} />
         <Table className='text-center' responsive bordered {...getTableProps()}>
           <thead>
             {headerGroups.map((headerGroup) => (

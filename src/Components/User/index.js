@@ -76,6 +76,7 @@ const Style = styled.div`
 
 const Index = ({ data }) => {
   const [modal, setModal] = useState(false);
+
   const {
     register,
     handleSubmit,
@@ -89,7 +90,7 @@ const Index = ({ data }) => {
 
   return (
     <Style>
-      <ModalCustom modal={modal} toggle={toggle} />
+      <ModalCustom modal={modal} toggle={toggle} userId={data.id} />
       <h1 className='text-center text-uppercase'>DATA PROFILE USER</h1>
       <div className='card'></div>
       <div className='custom-card'>
